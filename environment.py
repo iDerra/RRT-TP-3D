@@ -32,7 +32,7 @@ class Environment(QMainWindow):
     :param settings: An object containing environment display settings.
     :type settings: `EnvSettings`
     """
-    def __init__(self, size, obs, obs_sizes, obs_colors, start, goal, settings):
+    def __init__(self, size, obs, start, goal, settings):
         super().__init__()
         self.setWindowTitle("RRT Environment Viewer")
         self.setGeometry(100, 100, 800, 800)
@@ -40,7 +40,7 @@ class Environment(QMainWindow):
         self.size = size
         self.start = start
         self.goal = goal
-        self.obstacles = list(zip(obs, obs_sizes, obs_colors))
+        self.obstacles = obs
         self.trajectory = None
         self.settings = settings
 
@@ -89,7 +89,8 @@ class Environment(QMainWindow):
         if self.goal:
             self.create_cube(self.goal, (0.2, 0.2, 0.2), self.settings.goalColor)
 
-        for (pos, size, color) in self.obstacles:
+        for obstacle_data in self.obstacles:
+            _, pos, size, color = obstacle_data
             if color is None:
                 self.create_cube(pos, size, self.settings.obstacleColor)
             else:
@@ -130,11 +131,9 @@ class Environment(QMainWindow):
             [0, 3, 7], [0, 7, 4]
         ],  dtype=np.int32)
 
-        # Create the filled mesh (without shadows)
         mesh = GLMeshItem(vertexes=verts, faces=faces, smooth=True, color=color, drawEdges=False, glOptions='opaque')
         self.view.addItem(mesh)
 
-        # Create edges as separate lines
         edges = np.array([
             [0, 1], [1, 2], [2, 3], [3, 0],
             [4, 5], [5, 6], [6, 7], [7, 4],
@@ -142,7 +141,7 @@ class Environment(QMainWindow):
         ], dtype=np.int32)
 
         for edge in edges:
-            line = GLLinePlotItem(pos=verts[edge], color=(0, 0, 0, 1), width=2, antialias=True) #Black edges
+            line = GLLinePlotItem(pos=verts[edge], color=(0, 0, 0, 1), width=2, antialias=True)
             self.view.addItem(line)
 
     def create_boundary(self):

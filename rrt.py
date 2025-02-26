@@ -1,7 +1,7 @@
 import random as rd
 import numpy as np
 
-def search(size, start, goal, obs, obs_sizes, rrt_settings, nTests = 0):
+def search(size, start, goal, obs, rrt_settings, nTests = 0):
     """
     Performs a search using the RRT algorithm.
 
@@ -16,7 +16,7 @@ def search(size, start, goal, obs, obs_sizes, rrt_settings, nTests = 0):
     :return: A list of waypoints representing the path found by the RRT algorithm, or an empty list if no path is found.
     """
 
-    rrt_class = RRT(size, start, goal, obs, obs_sizes, rrt_settings)
+    rrt_class = RRT(size, start, goal, obs, rrt_settings)
     
     #This code runs x times the algorithm and store the amount of waypoints created in a file.
     if nTests > 0: 
@@ -45,14 +45,14 @@ class RRTSettings(object):
     Modifying some of these values may cause collisions, not reaching the target or other major problems, so only modify them if you know what you are doing.
 
     :param safeDistance: The minimum safe distance to maintain from obstacles. Defaults to 1.75.
-    :param goalDistance: The distance threshold to consider a node as reaching the goal. Defaults to 0.2.
+    :param goalDistance: The distance threshold to consider a node as reaching the goal. Defaults to 0.3.
     :param nodeDistance: The maximum distance between nodes in the tree. Defaults to 0.3.
     :param nodeLimit: The maximum number of nodes to generate before stopping. Defaults to 5000.
     :param quadrants: Whether to use quadrant-based sampling. Defaults to False.
     :param numQuadrantsPerAxis: The number of quadrants per axis if quadrant-based sampling is enabled. Defaults to 2.
     :param quadrantProb: The probability of sampling from a quadrant (as opposed to the whole space). Defaults to 0.5.
     """
-    def __init__(self, safeDistance=1.75, goalDistance=0.2, nodeDistance=0.3, nodeLimit=5000, quadrants=False, numQuadrantsPerAxis=2, quadrantProb=0.5):
+    def __init__(self, safeDistance=1.75, goalDistance=0.3, nodeDistance=0.3, nodeLimit=5000, quadrants=False, numQuadrantsPerAxis=2, quadrantProb=0.5):
         self.safeDistance = safeDistance
         self.goalDistance = goalDistance
         self.nodeDistance = nodeDistance
@@ -73,14 +73,19 @@ class RRT(object):
     :param settings: Settings for the RRT algorithm.
     :type settings: RRTSettings
     """
-    def __init__(self, size, start, goal, obs, obs_sizes, settings):
+    def __init__(self, size, start, goal, obs, settings):
         self.size = size
         self.start = start
         self.goal = goal
-        self.obs = obs
-        self.obs_sizes = obs_sizes
+        self.obs = []
+        self.obs_sizes = []
         self.use_quadrants = settings.quadrants
         self.settings = settings
+
+        for obstacle in obs:
+            _, obs, size, _ = obstacle
+            self.obs.append(obs)
+            self.obs_sizes.append(size)
 
         if settings.quadrants:
             self.quadrant_prob = settings.quadrantProb
@@ -274,7 +279,7 @@ class RRT(object):
 
             waypoints.append([list(new_waypoint), label, nearest_label])
 
-            if self.__calculate_distance(new_waypoint, self.goal) < self.settings.goalDistance:  # Reduced the goal threshold
+            if self.__calculate_distance(new_waypoint, self.goal) < self.settings.goalDistance:
                 print("Goal reached")
                 completed = True
                 back_waypoint = waypoints[-1]
@@ -290,8 +295,7 @@ class RRT(object):
                 rwp.reverse()
                 return rwp, len(waypoints)
         
-        #If the while loop is exited because max nodes were reached
-        if len(waypoints) > 0: # Return the path to the *last* generated waypoint.
+        if len(waypoints) > 0: 
             back_waypoint = waypoints[-1]
             while back_waypoint[1] != back_waypoint[2]:
                 rwp.append(list(back_waypoint[0]))
@@ -303,4 +307,4 @@ class RRT(object):
             rwp.reverse()
             return rwp, len(waypoints)
         else:
-            return [], 0 # Return empty if no waypoints were created
+            return [], 0
