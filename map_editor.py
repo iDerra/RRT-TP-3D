@@ -84,8 +84,8 @@ class SizeInputDialog(QWidget):
             QMessageBox.critical(self, "Error", "An unexpected error occurred:\n" + str(e))
 
     def add_start_button(self):
-        """Adds the 'Add Start Point' button to the Environment window."""
-        start_button = QPushButton("Add Start Point")
+        """Adds the 'Set Start Point' button to the Environment window."""
+        start_button = QPushButton("Set Start Point")
         start_button.clicked.connect(self.get_start_point)
 
         central_widget = self.environment.centralWidget()
@@ -192,8 +192,8 @@ class SizeInputDialog(QWidget):
             self.update_obstacle_list()
             
     def add_goal_button(self):
-        """Adds the 'Add Goal Point' button to the Environment window."""
-        goal_button = QPushButton("Add Goal Point")
+        """Adds the 'Set Goal Point' button to the Environment window."""
+        goal_button = QPushButton("Set Goal Point")
         goal_button.clicked.connect(self.get_goal_point)
 
         central_widget = self.environment.centralWidget()

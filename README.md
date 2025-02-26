@@ -5,10 +5,11 @@ The RRT Trajectory Planner 3D is a Python application built using PyQtGraph and 
 ## Main Features
 
 *   **3D Visualization:**  View the RRT algorithm's progress in a dynamic 3D environment.
-*   **Obstacle Creation:**  Define obstacles of varying sizes and positions within the environment.
-*   **Start/Goal Configuration:**  Set the starting and goal positions for the pathfinding algorithm.
+*   **Map Editor:** Define the size, start and finish positions and add obstacles easily with the help of a PyQt interface.
+*   **Save/Load maps:** Save the maps made in the **Map Editor** and use them for the RRT algorithm.
+*   **Obstacle Creation:**  Define obstacles of varying sizes, positions and colors within the environment.
 *   **Customizable RRT Parameters:**  Adjust settings such as safe distance, goal distance, node distance, and the maximum number of nodes.
-*   **Quadrant-Based Sampling (Optional):**  Enable quadrant-based sampling to bias node generation towards the goal.
+*   **Quadrant-Based Sampling:**  Enable quadrant-based sampling to bias node generation towards the goal.
 *   **Trajectory Display:**  Visualize the final path found by the RRT algorithm.
 *   **Interactive Environment:**  Rotate and zoom the 3D view to examine the path and environment.
 * **Testing Mode:** Run the algorithm multiple times and see the created amount of waypoints.
@@ -17,7 +18,7 @@ The RRT Trajectory Planner 3D is a Python application built using PyQtGraph and 
 
 <div>
   <img src="screenshots/Test1.png" width="400">
-  <img src="screenshots/Test2.png" width="398">
+  <img src="screenshots/Test2.png" width="400">
 </div>
 
 ## Installation
@@ -65,6 +66,13 @@ To change the look of the environment, edit the *EnvSettings* object in the main
     * **quadrants:** Enable/Disable quadrants division
     * **numQuadrantsPerAxis:** Number of quadrants per axis, only available if *quadrants* is enabled.
     * **quadrantProb:** Probability of creating a node inside the goal quadrant.
+
+* **Running The Map Editor:**
+    To run the Map Editor execute `python3 map_editor.py`.
+    * Define the size of the map.
+    * Define the start and goal positions.
+    * Define the obstacles. 
+    * Save the map on the `./maps` folder.
 
 * **Running Test Mode**
 If you want to generate multiple RRT in a row, use the *search* method located in the main file.
