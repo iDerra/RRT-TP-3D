@@ -72,7 +72,7 @@ To change the look of the environment, edit the *EnvSettings* object in the main
     * Define the size of the map.
     * Define the start and goal positions.
     * Define the obstacles. 
-    * Save the map on the `./maps` folder.
+    * Save the map in the `./maps` folder.
 
 * **Running Test Mode**
 If you want to generate multiple RRT in a row, use the *search* method located in the main file.
