@@ -1,0 +1,1 @@
+# mapEditor/__init__.py

@@ -6,10 +6,11 @@ class ObstacleDialog(QDialog):
     """
     Dialog for getting obstacle properties (position, size, color).
     """
-    def __init__(self, next_obstacle_id=None, obstacle_data=None):
+    def __init__(self, env_size, next_obstacle_id=None, obstacle_data=None):
         super().__init__()
 
         self.is_editing = obstacle_data is not None
+        self.env_size = env_size
 
         if self.is_editing:
             self.setWindowTitle("Edit Obstacle")
@@ -27,6 +28,9 @@ class ObstacleDialog(QDialog):
 
     def initUI(self):
         layout = QFormLayout()
+
+        size_label = QLabel(f"Environment Size: X=({self.env_size[0][0]}, {self.env_size[0][1]}), Y=({self.env_size[1][0]}, {self.env_size[1][1]}), Z=({self.env_size[2][0]}, {self.env_size[2][1]})")
+        layout.addRow(size_label)
 
         id_label = QLabel(f"Obstacle ID: {self.obstacle_id}")
         layout.addRow(id_label)

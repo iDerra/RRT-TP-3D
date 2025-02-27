@@ -12,12 +12,13 @@ class EnvSettings(object):
     :param obstacleColor: The color of obstacles (RGBA format). Defaults to (1, 0, 0, 1).
     :param boundary: Indicates whether to display a boundary. Defaults to True.
     """
-    def __init__(self, grid=True, startColor=(0, 1, 0, 1), goalColor=(0, 0, 1, 1), obstacleColor=(1, 0, 0, 1), boundary=True):
+    def __init__(self, grid=True, startColor=(0, 1, 0, 1), goalColor=(0, 0, 1, 1), obstacleColor=(1, 0, 0, 1), boundary=True, displayResolution=(1920, 1080)):
         self.grid = grid
         self.startColor = startColor
         self.goalColor = goalColor
         self.obstacleColor = obstacleColor
         self.boundary = boundary
+        self.displayResolution = displayResolution
 
 class Environment(QMainWindow):
     """
@@ -35,8 +36,10 @@ class Environment(QMainWindow):
     def __init__(self, size, obs, start, goal, settings):
         super().__init__()
         self.setWindowTitle("RRT Environment Viewer")
-        self.setGeometry(100, 100, 800, 800)
+        self.Hresolution = int(settings.displayResolution[0]*0.5)
+        self.Vresolution = int(settings.displayResolution[1]*0.8)
 
+        self.setGeometry(100, 100, self.Hresolution, self.Vresolution)
         self.size = size
         self.start = start
         self.goal = goal
@@ -75,9 +78,7 @@ class Environment(QMainWindow):
         self.view.clear()
 
         if self.settings.grid:
-            grid = GLGridItem()
-            grid.scale(1, 1, 1)
-            grid.setColor((0,0,0,255))
+            grid = self.add_grid()
             self.view.addItem(grid)
 
         if self.settings.boundary:
@@ -100,6 +101,32 @@ class Environment(QMainWindow):
             trajectory_line = GLLinePlotItem(pos=self.trajectory, color=(0, 0, 0, 1), width=8, antialias=True)
             self.view.addItem(trajectory_line)
 
+        self.add_coordinate_axes()
+
+    def add_grid(self):
+        """Adds (or updates) the grid to the environment."""
+        grid = GLGridItem()
+        grid.setSize(x = abs(max(self.size[0]) - min(self.size[0])) + 4,y = abs(max(self.size[1]) - min(self.size[1])) + 4, z=1)
+        grid.setSpacing(x=1, y=1, z=1) 
+        grid.setColor((0, 0, 0, 255))
+
+        center_x = (self.size[0][0] + self.size[0][1]) / 2
+        center_y = (self.size[1][0] + self.size[1][1]) / 2
+        grid.translate(center_x, center_y, 0)
+
+        return grid
+    
+    def add_coordinate_axes(self):
+        """Adds X, Y, and Z axes at (0, 0, 0)."""
+        x_axis = GLLinePlotItem(pos=np.array([[0, 0, 0], [1, 0, 0]], dtype=np.float32), color=(1, 0, 0, 1), width=3, antialias=True)
+        self.view.addItem(x_axis)
+
+        y_axis = GLLinePlotItem(pos=np.array([[0, 0, 0], [0, 1, 0]], dtype=np.float32), color=(0, 1, 0, 1), width=3, antialias=True)
+        self.view.addItem(y_axis)
+
+        z_axis = GLLinePlotItem(pos=np.array([[0, 0, 0], [0, 0, 1]], dtype=np.float32), color=(0, 0, 1, 1), width=3, antialias=True)
+        self.view.addItem(z_axis)
+
     def create_cube(self, pos, size, color):
         """
         Creates a cube in the 3D environment.
@@ -108,7 +135,6 @@ class Environment(QMainWindow):
         :param size: The dimensions of the cube (width, length, height).
         :param color: The color of the cube (RGBA).
         """
-
         x, y, z = pos
         sx, sy, sz = size
 
@@ -151,7 +177,6 @@ class Environment(QMainWindow):
         The boundary is rendered as a set of red lines outlining the environment's extents.
         It uses the environment's `size` attribute to determine the boundary dimensions.
         """
-
         min_x, max_x = self.size[0]
         min_y, max_y = self.size[1]
         min_z, max_z = self.size[2]

@@ -39,6 +39,7 @@ class StartPointDialog(QDialog):
         layout.addRow(button_box)
 
         self.setLayout(layout)
+        
     def get_coordinates(self):
         """
         Returns the coordinates entered by the user as floats.
