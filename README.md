@@ -87,6 +87,17 @@ The number of nodes of each generation will be stored in the testLog.log file, l
 *   **Y:** Depth (Front/Back / Into/Out of the screen)
 *   **Z:** Vertical (Up/Down)
 
+## Future improvements
+
+*   **Modify environment settings via PyQt interface:** Allow the user to modify the settings of the enviroment via the programme interface.
+*   **Modify RRT algorithm settings via PyQt interface:** Allow the user to modify the setting of the RRT algorithm via the programme interface.
+*   **Add help pop-ups for each setting:** Add an information pop-up for each setting to describe how any setting works and how to use it.
+*   **Add the multi-test via the interface:** Allow the user to run multiple RRT tests on the same map via the interface.
+*   **Improve the multi-test option.**
+*   **Add new trajectory planning algorithms.**
+*   **Improve current algorithms.**
+*   **Add new setting for the enviroment and current algorithms.**
+
 ## License
 
 This project is under the MIT License. See the [LICENSE](LICENSE) file for details.
