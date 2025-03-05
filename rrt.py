@@ -1,7 +1,7 @@
 import random as rd
 import numpy as np
 
-def search(size, start, goal, obs, rrt_settings, nTests = 0):
+def search(size, start, goal, obs, rrt_settings):
     """
     Performs a search using the RRT algorithm.
 
@@ -12,27 +12,11 @@ def search(size, start, goal, obs, rrt_settings, nTests = 0):
     :param obs_sizes: A list of obstacle sizes (width, length, height).
     :param rrt_settings: Settings for the RRT algorithm.
     :type rrt_settings: `RRTSettings`
-    :param nTests: The number of times to run the algorithm for testing. Defaults to 0.
     :return: A list of waypoints representing the path found by the RRT algorithm, or an empty list if no path is found.
     """
 
     rrt_class = RRT(size, start, goal, obs, rrt_settings)
-    
-    #This code runs x times the algorithm and store the amount of waypoints created in a file.
-    if nTests > 0: 
-        file=open("testLog.log","a")
-        file.write("New Test\n")
-        file.close()
-        for i in range(0,nTests):
-            file=open("testLog.log","a")
-
-            waypoints, total = rrt_class.main_logic()
-            print(f"{i+1}/{nTests}")
-            file.write(f"{i+1}/{nTests} - Nodes: "+str(total)+"\n")
-
-            file.close()
-    else:
-        waypoints, _ = rrt_class.main_logic()
+    waypoints, _ = rrt_class.main_logic()
     
     return waypoints
 
@@ -68,8 +52,7 @@ class RRT(object):
     :param size: The dimensions of the environment (min_x, max_x), (min_y, max_y), (min_z, max_z).
     :param start: The starting position (x, y, z).
     :param goal: The target (goal) position (x, y, z).
-    :param obs: A list of obstacle positions (x, y, z).
-    :param obs_sizes: A list of obstacle sizes (width, length, height).
+    :param obs: A list of obstacles.
     :param settings: Settings for the RRT algorithm.
     :type settings: RRTSettings
     """

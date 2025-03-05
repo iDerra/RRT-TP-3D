@@ -25,9 +25,7 @@ class Environment(QMainWindow):
     Creates the main window for displaying the RRT environment.
 
     :param size: The dimensions of the environment (width, length, height).
-    :param obs: A list of obstacle coordinates (x, y, z).
-    :param obs_sizes: A list of obstacle sizes (width, length, height).
-    :param obs_colors: A list of obstacle colors (RGBA).
+    :param obs: A list of obstacles.
     :param start: The starting position (x, y, z).
     :param goal: The goal position (x, y, z).
     :param settings: An object containing environment display settings.
@@ -46,6 +44,7 @@ class Environment(QMainWindow):
         self.obstacles = obs
         self.trajectory = None
         self.settings = settings
+        self.trajectory_items = []
 
         self.__initUI()
 
@@ -75,7 +74,6 @@ class Environment(QMainWindow):
         Clears the existing view and redraws all elements based on the current settings and data:
         grid, boundary, start/goal points, obstacles, and trajectory.
         """
-        self.view.clear()
 
         if self.settings.grid:
             grid = self.add_grid()
@@ -96,10 +94,6 @@ class Environment(QMainWindow):
                 self.create_cube(pos, size, self.settings.obstacleColor)
             else:
                 self.create_cube(pos, size, color)
-
-        if self.trajectory is not None:
-            trajectory_line = GLLinePlotItem(pos=self.trajectory, color=(0, 0, 0, 1), width=8, antialias=True)
-            self.view.addItem(trajectory_line)
 
         self.add_coordinate_axes()
 
@@ -203,9 +197,16 @@ class Environment(QMainWindow):
 
     def plotTrajectory(self, waypoints):
         """
-        Plots the trajectory (path) in the environment.
+        Plots the trajectory (path) in the environment.  Adds to self.trajectory_items.
 
         :param waypoints: A list of 3D points (x, y, z) representing the waypoints of the trajectory.
         """
-        self.trajectory = np.array(waypoints, dtype=np.float32)
-        self.updateView()
+        trajectory_line = GLLinePlotItem(pos=np.array(waypoints, dtype=np.float32), color=(0, 0, 0, 1), width=8, antialias=True)
+        self.view.addItem(trajectory_line)
+        self.trajectory_items.append(trajectory_line)
+
+    def clear_scene(self):
+        """Clears only the trajectory lines from the scene."""
+        for item in self.trajectory_items:
+            self.view.removeItem(item)
+        self.trajectory_items = []

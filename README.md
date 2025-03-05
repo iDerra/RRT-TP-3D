@@ -18,7 +18,7 @@ The RRT Trajectory Planner 3D is a Python application built using PyQtGraph and 
 
 <div>
   <img src="screenshots/Test1.png" width="400">
-  <img src="screenshots/Test2.png" width="400">
+  <img src="screenshots/Test2.png" width="360">
 </div>
 
 ## Installation
@@ -89,14 +89,12 @@ The number of nodes of each generation will be stored in the testLog.log file, l
 
 ## Future improvements
 
-*   **Modify environment settings via PyQt interface:** Allow the user to modify the settings of the enviroment via the programme interface.
-*   **Modify RRT algorithm settings via PyQt interface:** Allow the user to modify the setting of the RRT algorithm via the programme interface.
-*   **Add help pop-ups for each setting:** Add an information pop-up for each setting to describe how any setting works and how to use it.
-*   **Add the multi-test via the interface:** Allow the user to run multiple RRT tests on the same map via the interface.
-*   **Improve the multi-test option.**
-*   **Add new trajectory planning algorithms.**
-*   **Improve current algorithms.**
-*   **Add new setting for the enviroment and current algorithms.**
+* **Modify environment settings via PyQt interface:** Allow the user to modify the settings of the enviroment via the programme interface.
+* **Add help pop-ups for each setting:** Add an information pop-up for each setting to describe how any setting works and how to use it.
+* **Improve the multi-test option.**
+* **Add new trajectory planning algorithms.**
+* **Improve current algorithms.**
+* **Add new setting for the enviroment and current algorithms.**
 
 ## License
 
